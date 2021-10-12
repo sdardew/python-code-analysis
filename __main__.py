@@ -2,14 +2,6 @@ import ast
 from collections import deque
 import re
 
-# read the file
-def read_file(file_name):
-    f = open(file_name, 'r')
-    try:
-        return f.read()
-    finally:
-        f.close()
-
 
 # 나중에 dfs로 변경
 def is_recursive(ast_tree):
@@ -74,7 +66,6 @@ def get_data_structure(ast_tree):
     if value:
         return_list.append(('list', value))
     
-    # count dictionary
     value = 0
     value += t.count('value=Dict')
     value += t.count('Call(func=Name(id=\'dict\'')
@@ -82,7 +73,6 @@ def get_data_structure(ast_tree):
     if value:
         return_list.append(('dictionary', value))    
 
-    # print(return_list)
 
     return return_list
 
@@ -96,7 +86,14 @@ def is_bisect(dump_ast_tree):
 def main(code):
     ast_tree = ast.parse(code)
     
+    print("<recursion>")
     print(is_recursive(ast_tree))
+
+    print("<data structure>")
+    print(get_data_structure(ast_tree))
+
+    print("<binary search>")
+    print(is_bisect(ast.dump(ast_tree)))
 
 # binary search
 # 중첩 for문
@@ -104,23 +101,3 @@ if __name__ == "__main__":
 
     f = read_file('./test/test_recursion.py') # read code
     main(f)
-    # ast_tree = ast.parse(f)
-    
-    # print("date structure: " + str(get_data_structure(ast_tree)))
-    
-    # print(get_libraries(ast.dump(ast_tree)))
-
-    # print(ast.dump(ast_tree))
-
-    # get_data_structure(ast_tree)
-    # print(ast.dump(ast_tree))
-
-    
-    
-    # for b in ast_tree.body:
-        
-    #     print(ast.dump(b, indent=4))
-
-        # if isinstance(b, ast.FunctionDef):
-        #     print(ast.dump(b, indent=4))
-        #     print(b.body)
